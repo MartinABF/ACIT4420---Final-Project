@@ -2,11 +2,17 @@ import argparse
 import logging
 import sys
 from collections import Counter
+from datetime import date
 from pathlib import Path
 
-from busbidder.errors import BusBidderError
+from busbidder.display import format_search
+from busbidder.errors import BusBidderError, ConfigError, RequestError
+from busbidder.filtering import filter_offers
 from busbidder.loader import load_marketplace, write_rejected
 from busbidder.logs import configure_logging
+from busbidder.profiles import load_profiles, parse_weights
+from busbidder.scoring import rank_offers, validate_weights
+from busbidder.travel import PERIODS, TravelRequest
 
 logger = logging.getLogger(__name__)
 
@@ -25,13 +31,80 @@ def run_validate(args):
     return 0
 
 
+def find_destination(destinations, text):
+    wanted = text.strip().casefold()
+    for destination in destinations.values():
+        if wanted in (destination.code.casefold(), destination.name.casefold()):
+            return destination
+    names = ", ".join(sorted(d.name for d in destinations.values()))
+    raise RequestError(f"unknown destination {text!r}. Choose one of: {names}")
+
+
+def run_search(args):
+    if args.top < 1:
+        raise RequestError("--top must be at least 1")
+    market = load_marketplace(args.data_dir)
+    profiles = load_profiles(args.profiles)
+    if args.profile not in profiles:
+        raise ConfigError(f"unknown profile {args.profile!r}. Choose one of: {sorted(profiles)}")
+    profile = profiles[args.profile]
+    destination = find_destination(market.destinations, args.destination)
+    request = TravelRequest(
+        destination_code=destination.code,
+        earliest=args.earliest,
+        latest=args.latest,
+        passengers=args.passengers,
+        max_price=args.max_price,
+        max_transfers=args.max_transfers,
+        max_duration=args.max_duration,
+        min_luggage=args.min_luggage,
+        require_changeable=args.changeable,
+        require_refundable=args.refundable,
+    )
+    request = profile.apply(request, args.departure)
+    weights = validate_weights(parse_weights(args.weights)) if args.weights else profile.weights
+    result = filter_offers(market.offers, request)
+    ranked = rank_offers(result.accepted, request, weights)
+    logger.info("Search for %s: %d acceptable offers", destination.name, len(ranked))
+    print(format_search(destination, request, profile, weights, result, ranked, args.top))
+    return 0
+
+
+def iso_date(text):
+    try:
+        return date.fromisoformat(text)
+    except ValueError as error:
+        raise argparse.ArgumentTypeError(f"{text!r} is not a date like 2026-07-12") from error
+
+
+def add_search_command(commands):
+    search = commands.add_parser("search", help="filter and rank offers")
+    search.add_argument("--destination", required=True)
+    search.add_argument("--from", dest="earliest", type=iso_date, required=True)
+    search.add_argument("--to", dest="latest", type=iso_date, required=True)
+    search.add_argument("--profile", default="balanced")
+    search.add_argument("--weights", help="percentages, e.g. price=40,duration=25,...")
+    search.add_argument("--departure", choices=PERIODS)
+    search.add_argument("--passengers", type=int, default=1)
+    search.add_argument("--max-price", type=float)
+    search.add_argument("--max-transfers", type=int)
+    search.add_argument("--max-duration", type=int, help="minutes")
+    search.add_argument("--min-luggage", type=int, help="kg")
+    search.add_argument("--changeable", action="store_true")
+    search.add_argument("--refundable", action="store_true")
+    search.add_argument("--top", type=int, default=5)
+    search.set_defaults(handler=run_search)
+
+
 def build_parser():
     parser = argparse.ArgumentParser(prog="busbidder", description="BusBidder Spain")
     parser.add_argument("--data-dir", type=Path, default=Path("data"))
     parser.add_argument("--output-dir", type=Path, default=Path("output"))
+    parser.add_argument("--profiles", type=Path, default=Path("config/profiles.json"))
     commands = parser.add_subparsers(dest="command", required=True)
     validate = commands.add_parser("validate", help="check the data files")
     validate.set_defaults(handler=run_validate)
+    add_search_command(commands)
     return parser
 
 

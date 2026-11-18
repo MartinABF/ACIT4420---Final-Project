@@ -6,6 +6,14 @@ class DataFileError(BusBidderError):
     pass
 
 
+class ConfigError(BusBidderError):
+    pass
+
+
+class RequestError(BusBidderError):
+    pass
+
+
 class RecordError(BusBidderError):
     category = "invalid_value"
 

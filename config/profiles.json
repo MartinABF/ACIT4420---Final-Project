@@ -1,0 +1,28 @@
+{
+  "balanced": {
+    "description": "no single factor decides",
+    "preferred_period": "morning",
+    "weights": {"price": 0.40, "duration": 0.25, "departure": 0.15, "flexibility": 0.20}
+  },
+  "budget": {
+    "description": "lowest cost first",
+    "preferred_period": "morning",
+    "weights": {"price": 0.65, "duration": 0.15, "departure": 0.10, "flexibility": 0.05, "rating": 0.05}
+  },
+  "business": {
+    "description": "fast, direct and on time",
+    "preferred_period": "morning",
+    "requirements": {"max_transfers": 0, "require_changeable": true},
+    "weights": {"price": 0.05, "duration": 0.45, "departure": 0.30, "flexibility": 0.10, "rating": 0.10}
+  },
+  "flexible": {
+    "description": "tourist who may change plans",
+    "preferred_period": "afternoon",
+    "weights": {"price": 0.20, "duration": 0.10, "departure": 0.10, "flexibility": 0.50, "rating": 0.10}
+  },
+  "eco": {
+    "description": "lowest emissions first",
+    "preferred_period": "morning",
+    "weights": {"price": 0.15, "duration": 0.10, "departure": 0.10, "flexibility": 0.10, "rating": 0.05, "emissions": 0.50}
+  }
+}
