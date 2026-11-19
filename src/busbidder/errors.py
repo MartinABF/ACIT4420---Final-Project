@@ -14,6 +14,10 @@ class RequestError(BusBidderError):
     pass
 
 
+class BookingError(BusBidderError):
+    pass
+
+
 class RecordError(BusBidderError):
     category = "invalid_value"
 

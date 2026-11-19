@@ -5,7 +5,8 @@ from collections import Counter
 from datetime import date
 from pathlib import Path
 
-from busbidder.display import format_search
+from busbidder.booking import BookingStore
+from busbidder.display import format_booking, format_search
 from busbidder.errors import BusBidderError, ConfigError, RequestError
 from busbidder.filtering import filter_offers
 from busbidder.loader import load_marketplace, write_rejected
@@ -44,6 +45,7 @@ def run_search(args):
     if args.top < 1:
         raise RequestError("--top must be at least 1")
     market = load_marketplace(args.data_dir)
+    BookingStore(args.output_dir / "bookings.json").apply_to(market.offers)
     profiles = load_profiles(args.profiles)
     if args.profile not in profiles:
         raise ConfigError(f"unknown profile {args.profile!r}. Choose one of: {sorted(profiles)}")
@@ -67,6 +69,25 @@ def run_search(args):
     ranked = rank_offers(result.accepted, request, weights)
     logger.info("Search for %s: %d acceptable offers", destination.name, len(ranked))
     print(format_search(destination, request, profile, weights, result, ranked, args.top))
+    return 0
+
+
+def run_book(args):
+    market = load_marketplace(args.data_dir)
+    store = BookingStore(args.output_dir / "bookings.json")
+    store.apply_to(market.offers)
+    wanted = args.offer_id.strip().upper()
+    offer = next((o for o in market.offers if o.offer_id == wanted), None)
+    if offer is None:
+        raise RequestError(f"no valid offer with ID {args.offer_id}")
+    print(format_booking(store.book(offer, args.name, args.passengers), offer))
+    return 0
+
+
+def run_cancel(args):
+    booking = BookingStore(args.output_dir / "bookings.json").cancel(args.reference)
+    print(f"Booking {booking.reference} is cancelled and the seat is released.")
+    print(f"Refund: EUR {booking.refund_eur:.2f} (simulated)")
     return 0
 
 
@@ -105,6 +126,14 @@ def build_parser():
     validate = commands.add_parser("validate", help="check the data files")
     validate.set_defaults(handler=run_validate)
     add_search_command(commands)
+    book = commands.add_parser("book", help="book seats on an offer from the search table")
+    book.add_argument("--offer-id", required=True)
+    book.add_argument("--name", required=True)
+    book.add_argument("--passengers", type=int, default=1)
+    book.set_defaults(handler=run_book)
+    cancel = commands.add_parser("cancel", help="cancel a booking")
+    cancel.add_argument("--reference", required=True)
+    cancel.set_defaults(handler=run_cancel)
     return parser
 
 

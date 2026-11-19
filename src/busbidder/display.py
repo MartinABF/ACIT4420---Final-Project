@@ -64,3 +64,15 @@ def format_search(destination, request, profile, weights, result, ranked, top):
         lines.append("* no data for this offer, so a neutral score of 50 is used")
     lines += ["", *explain(ranked, weights)]
     return "\n".join(lines)
+
+
+def format_booking(booking, offer):
+    change = "changeable" if booking.changeable else "not changeable"
+    refund = "refundable" if booking.refundable else "not refundable"
+    return "\n".join([
+        f"Booking confirmed: {booking.reference}",
+        f"  {offer.company.name}, Madrid to {offer.destination.name}, {offer.departure:%Y-%m-%d %H:%M}",
+        f"  Traveller: {booking.traveller}, {booking.passengers} seat(s), EUR {booking.total_eur:.2f}",
+        f"  Ticket: {offer.fare.label}, {change}, {refund}. Payment: {booking.payment}",
+        f"  Seats left on this departure: {offer.seats_available}",
+    ])
