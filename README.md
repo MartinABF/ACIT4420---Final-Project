@@ -32,6 +32,8 @@ Search for offers:
 
 Destination, dates, seats, budget, transfers, duration, luggage and ticket rules are hard constraints, so an offer that breaks one is removed. Departure time and the weights are soft preferences and only change the score.
 
+Each row shows the offer's values, its score for every criterion and the total. Below the table there is a short explanation of why the top offer won, which drawbacks it still has and how close the runner-up was.
+
 The profiles `balanced`, `budget`, `business`, `flexible` and `eco` are in `config/profiles.json`. To use your own weights, add `--weights price=40,duration=25,departure=15,flexibility=20`. They have to add up to 100.
 
 The input files are in `data/`. Rows that fail validation are not corrected. They are left out and saved to `output/rejected_offers.csv` so they can be reviewed, and the log is in `output/busbidder.log`.

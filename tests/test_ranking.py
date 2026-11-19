@@ -7,6 +7,7 @@ from test_models import make_offer
 
 from busbidder.cli import main
 from busbidder.errors import ConfigError, RequestError
+from busbidder.explain import explain
 from busbidder.filtering import filter_offers
 from busbidder.loader import load_marketplace
 from busbidder.models import FareConditions
@@ -155,6 +156,23 @@ def test_broken_profile_file_is_reported(tmp_path):
         load_profiles(path)
 
 
+def test_explanation_gives_strengths_drawbacks_and_limits():
+    cheap, dear = make_offer(price_eur=20, offer_id="A"), make_offer(price_eur=40, offer_id="B")
+    text = "\n".join(explain(rank_offers([dear, cheap], make_request(), WEIGHTS), WEIGHTS))
+    assert "A (SolRuta) ranks first" in text
+    assert "Strengths: a direct route and a lower price than most options." in text
+    assert "cannot be changed or refunded and a departure far from" in text
+    assert "points more than B" in text
+    assert "not an objective best" in text
+
+
+def test_explanation_for_one_offer_and_for_a_close_race():
+    alone = explain(rank_offers([make_offer()], make_request(), WEIGHTS), WEIGHTS)
+    assert not any("points more" in line for line in alone)
+    twins = rank_offers([make_offer(offer_id="A"), make_offer(offer_id="B")], make_request(), WEIGHTS)
+    assert any("gap is small" in line for line in explain(twins, WEIGHTS))
+
+
 def test_profiles_recommend_different_offers():
     market = load_marketplace(ROOT / "data")
     winners = set()
@@ -171,6 +189,7 @@ def test_search_shows_constraints_and_ranking(tmp_path, capsys):
     assert "Hard constraints" in output and "Soft preferences" in output
     assert "total price up to EUR 50" in output
     assert "\n 3 " in output and "\n 4 " not in output
+    assert "ranks first" in output
 
 
 def test_search_without_matches(tmp_path, capsys):

@@ -1,11 +1,7 @@
-LABELS = {
-    "price": "Price",
-    "duration": "Time",
-    "departure": "Dep",
-    "flexibility": "Flex",
-    "rating": "Rate",
-    "emissions": "CO2",
-}
+from busbidder.explain import explain
+
+LABELS = {"price": "Price", "duration": "Time", "departure": "Dep",
+          "flexibility": "Flex", "rating": "Rate", "emissions": "CO2"}
 
 
 def _hard_constraints(request, destination):
@@ -37,7 +33,7 @@ def _row(position, item, names):
     return (
         f"{position:>2} {item.total:6.2f}  {offer.company.name:<15}"
         f"{offer.departure:%m-%d %H:%M}  {minutes // 60:>2}h{minutes % 60:02d}"
-        f"{offer.price_eur:8.2f}{offer.transfers:>6}  {offer.fare.label:<8}{scores}"
+        f"{offer.price_eur:8.2f}{offer.transfers:>6}  {offer.fare.label:<8}{scores} {offer.offer_id}"
     )
 
 
@@ -61,9 +57,10 @@ def format_search(destination, request, profile, weights, result, ranked, top):
     lines += [
         "",
         f" # {'Score':>6}  {'Company':<15}{'Departure':<11}  {'Trip':>5}"
-        f"{'EUR':>8}{'Stops':>6}  {'Fare':<8}{header}",
+        f"{'EUR':>8}{'Stops':>6}  {'Fare':<8}{header} Offer ID",
     ]
     lines += [_row(number, item, names) for number, item in enumerate(ranked[:top], 1)]
     if any(item.estimated for item in ranked[:top]):
         lines.append("* no data for this offer, so a neutral score of 50 is used")
+    lines += ["", *explain(ranked, weights)]
     return "\n".join(lines)

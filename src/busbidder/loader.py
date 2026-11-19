@@ -29,19 +29,9 @@ OFFER_ID = re.compile(
 COMPANY_COLUMNS = ("code", "name", "profile")
 DESTINATION_COLUMNS = ("code", "name", "distance_km", "coastal")
 OFFER_COLUMNS = (
-    "offer_id",
-    "company_code",
-    "destination_code",
-    "departure",
-    "arrival",
-    "price_eur",
-    "transfers",
-    "luggage_kg",
-    "changeable",
-    "refundable",
-    "seats_available",
-    "rating",
-    "co2_kg",
+    "offer_id", "company_code", "destination_code", "departure", "arrival",
+    "price_eur", "transfers", "luggage_kg", "changeable", "refundable",
+    "seats_available", "rating", "co2_kg",
 )
 
 

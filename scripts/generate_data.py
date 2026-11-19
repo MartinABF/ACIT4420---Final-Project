@@ -1,8 +1,10 @@
 import csv
 import random
-from dataclasses import dataclass
+from collections import namedtuple
 from datetime import date, datetime, time, timedelta
 from pathlib import Path
+
+from busbidder.loader import OFFER_COLUMNS
 
 DATA_DIR = Path(__file__).resolve().parents[1] / "data"
 SEED = 4420
@@ -36,17 +38,7 @@ DESTINATIONS = [
     ("CDZ", "Cadiz", 650, True, False),
 ]
 
-
-@dataclass(frozen=True)
-class Style:
-    price: float
-    speed: int
-    hours: tuple
-    rating: float
-    co2: float
-    transfer_risk: float
-
-
+Style = namedtuple("Style", "price speed hours rating co2 transfer_risk")
 STYLES = {
     "SOL": Style(0.82, 70, (7, 13), 3.6, 1.0, 0.50),
     "CAM": Style(1.18, 88, (8, 16), 4.4, 1.0, 0.05),
@@ -61,12 +53,6 @@ FARES = {
     "F": ("yes", "no", 1.15, 20),
     "P": ("yes", "yes", 1.30, 25),
 }
-
-COLUMNS = (
-    "offer_id", "company_code", "destination_code", "departure", "arrival",
-    "price_eur", "transfers", "luggage_kg", "changeable", "refundable",
-    "seats_available", "rating", "co2_kg",
-)
 
 
 def stamp(moment):
@@ -175,7 +161,7 @@ def main():
         ("code", "name", "distance_km", "coastal"),
         ((c, n, km, "yes" if coast else "no") for c, n, km, coast, _ in DESTINATIONS),
     )
-    write_csv("offers.csv", COLUMNS, ([row[c] for c in COLUMNS] for row in offers))
+    write_csv("offers.csv", OFFER_COLUMNS, ([row[c] for c in OFFER_COLUMNS] for row in offers))
     print(f"Wrote {len(offers)} offer rows to {DATA_DIR}")
 
 
