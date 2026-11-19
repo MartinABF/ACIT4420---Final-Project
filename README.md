@@ -2,7 +2,7 @@
 
 Final project for ACIT4420. BusBidder reads simulated bus offers from Madrid to 15 Spanish cities, removes the ones that break the traveller's requirements and ranks the rest with a weighted score. You can then book a seat and cancel it again.
 
-It needs Python 3.11 or newer. The program only uses the standard library, and pytest is needed for the tests.
+It needs Python 3.11 or newer. The program only uses the standard library, and pytest is needed for the tests. The entry point is `src/busbidder/__main__.py`, which runs as `python -m busbidder`.
 
 ## Setup
 
@@ -36,6 +36,12 @@ Each row shows the offer's values, its score for every criterion and the total. 
 
 The profiles `balanced`, `budget`, `business`, `flexible` and `eco` are in `config/profiles.json`. To use your own weights, add `--weights price=40,duration=25,departure=15,flexibility=20`. They have to add up to 100.
 
+To see the winner for every profile on the same trip, use `compare` with the same options as `search`:
+
+```bash
+.venv\Scripts\python -m busbidder compare --destination Malaga --from 2026-07-12 --to 2026-07-14 --max-price 50 --max-transfers 1 --changeable
+```
+
 Book an offer by copying its ID from the search table:
 
 ```bash
@@ -52,13 +58,34 @@ Cancel with the reference:
 
 A refundable (premium) ticket gets the full price back. Flex and basic tickets get nothing back, but the seat is released.
 
-The input files are in `data/`. Rows that fail validation are not corrected. They are left out and saved to `output/rejected_offers.csv` so they can be reviewed, and the log is in `output/busbidder.log`.
+## Data and output
+
+The input files are in `data/` and the profiles are in `config/profiles.json`. Rows that fail validation are not corrected. They are left out and saved to `output/rejected_offers.csv` so they can be reviewed, and the log is in `output/busbidder.log`.
 
 The data is simulated. This command recreates the same files:
 
 ```bash
 .venv\Scripts\python scripts\generate_data.py
 ```
+
+## Evaluation and examples
+
+`scripts/evaluate.py` repeats the experiments behind the evaluation. It checks how stable the winner is when the weights change, which companies win across all destinations, what happens when missing CO2 values are filled in, and how often removing one offer changes the winner. It takes about 15 seconds.
+
+```bash
+.venv\Scripts\python scripts\evaluate.py
+```
+
+Saved output from every command is in `examples/`, and `examples/README.md` explains each file.
+
+## Project layout
+
+- `src/busbidder/`: the program
+- `data/`: companies, destinations and offers
+- `config/profiles.json`: the traveller profiles
+- `scripts/`: the data generator and the evaluation
+- `tests/`: the pytest tests
+- `examples/`: saved output
 
 ## Tests
 

@@ -1,0 +1,12 @@
+> python -m busbidder compare --destination Malaga --from 2026-07-12 --to 2026-07-14 --max-price 50 --max-transfers 1 --changeable
+
+Profile comparison, to Malaga, 2026-07-12 to 2026-07-14, 1 seat(s), total price up to EUR 50, at most 1 transfer(s), changeable ticket
+
+Profile   Offers  Winner         Departure     Trip     EUR  Fare     Score    Gap
+balanced      14  CostaLink      07-12 09:45   6h15   42.24  flex     81.68   1.43
+budget        14  SolRuta        07-14 07:30   7h35   40.68  flex     80.99   0.05
+business      11  CostaLink      07-14 09:45   6h15   42.57  flex     92.88   0.30
+flexible      14  CostaLink      07-13 15:00   6h15   48.01  premium  79.85  11.26
+eco           14  NocheVia       07-14 22:45   7h50   45.90  flex     67.35   0.70
+
+Each profile adds its own weights and requirements. A small gap means the order could easily change.

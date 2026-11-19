@@ -66,6 +66,29 @@ def format_search(destination, request, profile, weights, result, ranked, top):
     return "\n".join(lines)
 
 
+def format_comparison(destination, request, results):
+    lines = [
+        f"Profile comparison, {_hard_constraints(request, destination)}",
+        "",
+        f"{'Profile':<10}{'Offers':>6}  {'Winner':<15}{'Departure':<13}{'Trip':>5}"
+        f"{'EUR':>8}  {'Fare':<8}{'Score':>6}{'Gap':>7}",
+    ]
+    for name, ranked in results:
+        if not ranked:
+            lines.append(f"{name:<10}{0:>6}  no offer meets the hard constraints")
+            continue
+        offer, total = ranked[0].offer, ranked[0].total
+        gap = f"{total - ranked[1].total:7.2f}" if len(ranked) > 1 else f"{'-':>7}"
+        minutes = offer.duration_minutes
+        lines.append(
+            f"{name:<10}{len(ranked):>6}  {offer.company.name:<15}{offer.departure:%m-%d %H:%M}  "
+            f"{minutes // 60:>2}h{minutes % 60:02d}{offer.price_eur:8.2f}  {offer.fare.label:<8}"
+            f"{total:6.2f}{gap}"
+        )
+    lines += ["", "Each profile adds its own weights and requirements. A small gap means the order could easily change."]
+    return "\n".join(lines)
+
+
 def format_booking(booking, offer):
     change = "changeable" if booking.changeable else "not changeable"
     refund = "refundable" if booking.refundable else "not refundable"

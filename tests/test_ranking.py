@@ -203,3 +203,16 @@ def test_search_without_matches(tmp_path, capsys):
 def test_search_reports_bad_input(tmp_path, capsys, extra):
     assert run_cli(tmp_path, *SEARCH, *extra) == 1
     assert "Error:" in capsys.readouterr().err
+
+
+def test_compare_shows_one_winner_per_profile(tmp_path, capsys):
+    limits = ["--max-price", "50", "--max-transfers", "1", "--changeable"]
+    assert run_cli(tmp_path, "compare", *SEARCH[1:], *limits) == 0
+    rows = {line.split()[0]: line for line in capsys.readouterr().out.splitlines() if line[:1].islower()}
+    assert set(rows) == {"balanced", "budget", "business", "flexible", "eco"}
+    assert "SolRuta" in rows["budget"] and "NocheVia" in rows["eco"]
+
+
+def test_compare_without_matches(tmp_path, capsys):
+    assert run_cli(tmp_path, "compare", *SEARCH[1:], "--max-price", "1") == 0
+    assert capsys.readouterr().out.count("no offer meets") == 5

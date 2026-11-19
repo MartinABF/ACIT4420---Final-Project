@@ -21,20 +21,13 @@ COMPANIES = [
 
 # code, name, road distance from Madrid in km, coastal, major city
 DESTINATIONS = [
-    ("BCN", "Barcelona", 620, True, True),
-    ("VLC", "Valencia", 355, True, True),
-    ("SVQ", "Seville", 530, False, True),
-    ("AGP", "Malaga", 530, True, True),
-    ("GRX", "Granada", 420, False, False),
-    ("ODB", "Cordoba", 400, False, False),
-    ("BIO", "Bilbao", 395, True, True),
-    ("EAS", "San Sebastian", 450, True, False),
-    ("ZAZ", "Zaragoza", 315, False, True),
-    ("ALC", "Alicante", 420, True, False),
-    ("MJV", "Murcia", 400, False, False),
-    ("SLM", "Salamanca", 215, False, False),
-    ("TOL", "Toledo", 75, False, False),
-    ("SCQ", "Santiago de Compostela", 600, False, False),
+    ("BCN", "Barcelona", 620, True, True), ("VLC", "Valencia", 355, True, True),
+    ("SVQ", "Seville", 530, False, True), ("AGP", "Malaga", 530, True, True),
+    ("GRX", "Granada", 420, False, False), ("ODB", "Cordoba", 400, False, False),
+    ("BIO", "Bilbao", 395, True, True), ("EAS", "San Sebastian", 450, True, False),
+    ("ZAZ", "Zaragoza", 315, False, True), ("ALC", "Alicante", 420, True, False),
+    ("MJV", "Murcia", 400, False, False), ("SLM", "Salamanca", 215, False, False),
+    ("TOL", "Toledo", 75, False, False), ("SCQ", "Santiago de Compostela", 600, False, False),
     ("CDZ", "Cadiz", 650, True, False),
 ]
 

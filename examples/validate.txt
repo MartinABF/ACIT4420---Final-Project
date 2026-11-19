@@ -1,0 +1,13 @@
+> python -m busbidder validate
+
+Companies:       5
+Destinations:    15
+Valid offers:    1500
+Rejected offers: 10
+  duplicate: 1
+  inconsistent: 2
+  invalid_value: 4
+  missing_value: 1
+  no_seats: 1
+  unknown_reference: 1
+Rejected rows saved to output\rejected_offers.csv

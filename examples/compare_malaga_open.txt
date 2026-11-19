@@ -1,0 +1,12 @@
+> python -m busbidder compare --destination Malaga --from 2026-07-12 --to 2026-07-14
+
+Profile comparison, to Malaga, 2026-07-12 to 2026-07-14, 1 seat(s)
+
+Profile   Offers  Winner         Departure     Trip     EUR  Fare     Score    Gap
+balanced      60  CostaLink      07-12 09:45   6h15   42.24  flex     81.31   0.47
+budget        60  CostaLink      07-12 09:45   6h15   37.05  basic    90.68   1.03
+business      23  Camino Express 07-13 08:45   6h00   55.15  flex     91.20   0.97
+flexible      60  CostaLink      07-13 15:00   6h15   48.01  premium  88.22   8.04
+eco           60  VerdeBus       07-13 10:15   7h00   66.36  premium  80.82   1.23
+
+Each profile adds its own weights and requirements. A small gap means the order could easily change.

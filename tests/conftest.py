@@ -18,21 +18,9 @@ def destinations():
 
 @pytest.fixture
 def row():
-    return {
-        "offer_id": "SOL-AGP-20260712-0830-B",
-        "company_code": "SOL",
-        "destination_code": "AGP",
-        "departure": "2026-07-12T08:30",
-        "arrival": "2026-07-12T14:30",
-        "price_eur": "39.90",
-        "transfers": "1",
-        "luggage_kg": "15",
-        "changeable": "no",
-        "refundable": "no",
-        "seats_available": "12",
-        "rating": "3.8",
-        "co2_kg": "14.8",
-    }
+    values = ["SOL-AGP-20260712-0830-B", "SOL", "AGP", "2026-07-12T08:30", "2026-07-12T14:30",
+              "39.90", "1", "15", "no", "no", "12", "3.8", "14.8"]
+    return dict(zip(OFFER_COLUMNS, values))
 
 
 @pytest.fixture

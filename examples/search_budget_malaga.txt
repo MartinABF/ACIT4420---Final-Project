@@ -1,0 +1,21 @@
+> python -m busbidder search --destination Malaga --from 2026-07-12 --to 2026-07-14 --max-price 50 --max-transfers 1 --changeable --profile budget
+
+Profile: budget (lowest cost first)
+Hard constraints, offers that fail are removed: to Malaga, 2026-07-12 to 2026-07-14, 1 seat(s), total price up to EUR 50, at most 1 transfer(s), changeable ticket
+Soft preferences, these only change the score: morning departure; price 65%, duration 15%, departure 10%, flexibility 5%, rating 5%
+Offers: 1500 checked, 14 acceptable
+Removed by: destination 1400, travel_window 40, budget 19, transfers 4, changeable 23
+
+ #  Score  Company        Departure     Trip     EUR Stops  Fare     Price   Time    Dep   Flex   Rate  Offer ID
+ 1  80.99  SolRuta        07-14 07:30   7h35   40.68     0  flex      91.1   36.1  100.0   60.0   67.5  SOL-AGP-20260714-0730-F
+ 2  80.93  SolRuta        07-12 07:00   7h35   40.67     0  flex      91.2   36.1  100.0   60.0   65.0  SOL-AGP-20260712-0700-F
+ 3  79.97  CostaLink      07-12 09:45   6h15   42.24     0  flex      74.2  100.0  100.0   60.0   75.0  COS-AGP-20260712-0945-F
+ 4  79.46  SolRuta        07-12 13:45   8h15   38.34     1  flex     100.0    4.2   70.8   60.0   75.0  SOL-AGP-20260712-1345-F
+ 5  77.90  CostaLink      07-14 09:45   6h15   42.57     0  flex      70.6  100.0  100.0   60.0   80.0  COS-AGP-20260714-0945-F
+
+Why SOL-AGP-20260714-0730-F (SolRuta) ranks first:
+  Strengths: a direct route, a lower price than most options and a departure near your preferred time.
+  Drawbacks: a longer journey than most options.
+  It scores 0.05 points more than SOL-AGP-20260712-0700-F.
+  The gap is small, so slightly different weights could change the order.
+  This is the best match for the chosen constraints and weights, not an objective best.

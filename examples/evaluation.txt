@@ -1,0 +1,20 @@
+> python scripts/evaluate.py
+
+Balanced profile, Malaga 12-14 July, max EUR 50, max one transfer, changeable:
+  price 25%, duration 40%: COS-AGP-20260712-0945-F (CostaLink)
+  price 30%, duration 35%: COS-AGP-20260712-0945-F (CostaLink)
+  price 35%, duration 30%: COS-AGP-20260712-0945-F (CostaLink)
+  price 40%, duration 25%: COS-AGP-20260712-0945-F (CostaLink)
+  price 45%, duration 20%: COS-AGP-20260712-0945-F (CostaLink)
+  price 50%, duration 15%: COS-AGP-20260712-0945-F (CostaLink)
+  price 55%, duration 10%: SOL-AGP-20260712-0700-F (SolRuta)
+
+Winners over all 15 destinations, 10-14 July, no other limits:
+  balanced  {'CostaLink': 7, 'SolRuta': 8}, best NocheVia position 51
+  budget    {'CostaLink': 5, 'SolRuta': 10}, best NocheVia position 13
+  business  {'Camino Express': 15}, best NocheVia position 28
+  flexible  {'CostaLink': 7, 'SolRuta': 7, 'Camino Express': 1}, best NocheVia position 12
+  eco       {'VerdeBus': 15}, best NocheVia position 23
+
+Eco top three changes after filling in missing CO2: 3 of 15
+Removing one offer outside the top two changed the winner in 4 of 75 searches (39 of 6406 removals)

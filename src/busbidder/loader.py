@@ -6,14 +6,8 @@ from datetime import datetime
 from pathlib import Path
 
 from busbidder.errors import (
-    DataFileError,
-    DuplicateRecordError,
-    InconsistentRecordError,
-    InvalidFieldError,
-    MissingFieldError,
-    NoSeatsError,
-    RecordError,
-    UnknownReferenceError,
+    DataFileError, DuplicateRecordError, InconsistentRecordError, InvalidFieldError,
+    MissingFieldError, NoSeatsError, RecordError, UnknownReferenceError,
 )
 from busbidder.models import Company, Destination, FareConditions, Offer
 

@@ -1,0 +1,16 @@
+> python -m busbidder book --offer-id COS-AGP-20260713-1500-P --name "Ola Nordmann"
+
+Booking confirmed: BB-6SCE83
+  CostaLink, Madrid to Malaga, 2026-07-13 15:00
+  Traveller: Ola Nordmann, 1 seat(s), EUR 48.01
+  Ticket: premium, changeable, refundable. Payment: paid (simulated)
+  Seats left on this departure: 15
+
+> python -m busbidder cancel --reference BB-6SCE83
+
+Booking BB-6SCE83 is cancelled and the seat is released.
+Refund: EUR 48.01 (simulated)
+
+> python -m busbidder cancel --reference BB-6SCE83
+
+Error: BB-6SCE83 is already cancelled
