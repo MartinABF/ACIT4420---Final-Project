@@ -6,7 +6,9 @@ It needs Python 3.11 or newer. The program only uses the standard library, and p
 
 ## Setup
 
-Run every command from the project folder. These are for PowerShell on Windows:
+Check that you have Python 3.11 or newer with `python --version` on Windows or `python3 --version` on macOS and Linux. The `python3` that comes with macOS can be too old, so install a newer one from python.org or Homebrew if needed.
+
+Run every command from the project folder. On Windows (PowerShell):
 
 ```bash
 python -m venv .venv
@@ -15,6 +17,18 @@ python -m venv .venv
 ```bash
 .venv\Scripts\python -m pip install -e ".[dev]"
 ```
+
+On macOS and Linux:
+
+```bash
+python3 -m venv .venv
+```
+
+```bash
+.venv/bin/python -m pip install -e ".[dev]"
+```
+
+The commands below are written for Windows. On macOS and Linux, use `.venv/bin/python` instead of `.venv\Scripts\python`, and `/` instead of `\` in file paths.
 
 ## Run
 
@@ -86,9 +100,12 @@ Saved output from every command is in `examples/`, and `examples/README.md` expl
 - `scripts/`: the data generator and the evaluation
 - `tests/`: the pytest tests
 - `examples/`: saved output
+- `.github/workflows/tests.yml`: the automatic test run on GitHub
 
 ## Tests
 
 ```bash
 .venv\Scripts\python -m pytest
 ```
+
+Every push also runs the tests on GitHub Actions on Windows, macOS and Linux with Python 3.11 to 3.14.
